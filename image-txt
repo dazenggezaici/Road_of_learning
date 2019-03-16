@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = "Todd"
+
+from PIL import Image
+
+txt = ""
+ascii_char = list("这里填入你想要在图片上显示的字符！")  # 填入少笔画的字符可以让图片显示的更清楚，如：一二三四
+
+img = Image.open("这里填入图片地址.jpg")
+# 这里的宽和高可以自己定义，尽量与输入图片比例相同
+# width*height的值越大图片越清晰，但字会显得很小
+width = img.size[0]
+height = img.size[1]
+# width = 200
+# height = 70
+
+im = img.resize((width, height), Image.NEAREST)
+'''
+以resize（（width,height),image.nearest）函数来说，第二个参数有几个选项，如下：
+参数值 含义
+Image.NEAREST 低质量
+Image.BILINEAR 双线性
+Image.BICUBIC 三次样条插值
+Image.ANTIALIAS 高质量
+'''
+
+
+def get_char(r, g, b, alpha=256):  # 将图像转为灰度图像再将像素点输出成文字
+    if alpha == 0:
+        return ''
+    length = len(ascii_char)
+    gray = int(0.2126 * r + 0.7152 * g + 0.0722 * b)
+    unit = (256.0 + 1) / length
+    return ascii_char[int(gray / unit)]
+
+
+for i in range(height):  # 把每个像素点填充成字符
+    for j in range(width):
+        txt += get_char(*im.getpixel((j, i)))
+        '''
+        因为getpixel函数返回的是一个元组,而我们定义的函数get_char是需要传入3个参数的
+        这时候在返回值元组前加上*,可以让元组里的元素单个拿出当参数
+        Python在list或tuple前面加一个*号
+        把list或tuple的元素变成可变参数传进去
+        '''
+    txt += '\n'
+print(txt)
+f = open("output.txt", 'w', encoding="utf-8")
+f.write(txt)
+f.close()
