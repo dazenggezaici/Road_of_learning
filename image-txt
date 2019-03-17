@@ -32,8 +32,8 @@ def get_char(r, g, b, alpha=256):  # 将图像转为灰度图像再将像素点�
         return ''
     length = len(ascii_char)
     gray = int(0.2126 * r + 0.7152 * g + 0.0722 * b)
-    unit = (256.0 + 1) / length
-    return ascii_char[int(gray / unit)]
+    unit = (256.0 + 1) / length  # 单元，256按字符长度分段
+    return ascii_char[int(gray / unit)]  # length*gray/256
 
 
 for i in range(height):  # 把每个像素点填充成字符
