@@ -1,0 +1,20 @@
+在Centos7上安装网易云音乐：
+  1、首先在网易云官网下载Ubuntu版本的deb包
+  2、ar -vx netease-cloud-music_1.1.0_amd64_ubuntu.deb  # 解压deb包
+  3、tar -xf data.tar.xz  # 继续解压刚解压出的data压缩包
+  4、cp -r usr/* /usr/  # 将data解压出的usr下的所有拷贝到/usr/
+  5、/usr/bin/netease-cloud-music  # 运行软件查看报错信息，缺少什么库就装什么库
+  问题1：提示缺少libvlc.so.5之类的模块，需要安装vlc
+  问题1解决：
+    yum localinstall --nogpgcheck https://mirrors.tuna.tsinghua.edu.cn/epel//7/x86_64/Packages/e/epel-release-7-11.noarch.rpm
+    yum localinstall --nogpgcheck http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
+    yum -y install vlc
+  问题2：/lib64/libstdc++.so.6: version `GLIBCXX_3.4.21' not found  提示版本错误之类的，需要安装更高版本的gcc
+  问题2解决：
+    http://mirrors.hust.edu.cn/gnu/gcc/gcc-5.4.0/gcc-5.4.0.tar.bz2  # 下载高版本的gcc，链接失效就去官网找
+    tar -xf gcc-5.4.0.tar.bz2  # 解压源码包
+    cd gcc-5.4.0/
+    ./contrib/download_prerequisites
+    ./configure --prefix=/usr --enable-languages=c,c++ --disable-multilib  # 配置
+    make -j4  # 编译，编译过程非常久，大约需要45分钟+
+    make install  # 安装
