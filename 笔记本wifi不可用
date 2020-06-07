@@ -1,0 +1,3 @@
+tee /etc/modprobe.d/blacklist-ideapad.conf <<< "blacklist ideapad_laptop"
+# 需要禁用ideapad_laptop模块，该模块会和wifi模块冲突
+modprobe -r ideapad_laptop # 立即生效
